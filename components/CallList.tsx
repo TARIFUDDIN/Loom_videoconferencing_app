@@ -62,26 +62,27 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
         const callData = await Promise.all(
           callRecordings?.map((meeting) => meeting.queryRecordings()) ?? [],
         );
-
+  
         const recordings = callData
           .filter((call) => call.recordings.length > 0)
           .flatMap((call) => call.recordings)
           .filter((recording) => recording.url);
-
+  
         setRecordings(recordings);
       } catch (error) {
+        console.error(error); // Log the error for debugging purposes
         toast({
           title: 'Error loading recordings',
           description: 'Please try again later',
         });
       }
     };
-
+  
     if (type === 'recordings') {
       fetchRecordings();
     }
   }, [type, callRecordings, toast]);
-
+  
   if (isLoading) return <Loader />;
 
   const calls = getCalls();
